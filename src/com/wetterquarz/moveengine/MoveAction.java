@@ -13,7 +13,7 @@ public class MoveAction {
 	
 	private final Path path;
 	private final Movable object;
-	private final double blocksPerTick = 0.03;
+	private final double blocksPerTick;
 	private final Runnable callback;
 	
 	private double currentSegmentLength;
@@ -22,27 +22,30 @@ public class MoveAction {
 	private boolean finished = false;
 	
 	public MoveAction(Movable object, Path path) {
-		this.path = path;
-		this.object = object;
-		this.callback = null;
+		this(object, path, null);
 	}
 	
 	public MoveAction(Movable object, Path path, Runnable callback) {
+		this(object, path, callback, 0.15);
+	}
+	
+	public MoveAction(Movable object, Path path, Runnable callback, double blocksPerTick) {
 		this.path = path;
 		this.object = object;
 		this.callback = callback;
+		this.blocksPerTick = blocksPerTick;
 	}
 	
 	public MoveAction(Movable object, Collection<Vector> path) {
-		this.path = new Path(path);
-		this.object = object;
-		this.callback = null;
+		this(object, new Path(path));
 	}
 	
 	public MoveAction(Movable object, Collection<Vector> path, Runnable callback) {
-		this.path = new Path(path);
-		this.object = object;
-		this.callback = callback;
+		this(object, new Path(path), callback);
+	}
+	
+	public MoveAction(Movable object, Collection<Vector> path, Runnable callback, double blocksPerTick) {
+		this(object, new Path(path), callback, blocksPerTick);
 	}
 	
 	public void start() {
@@ -106,7 +109,7 @@ public class MoveAction {
 				});
 			}
 			calls.forEach(action -> action.callback.run());
-		}, 10000, 50, TimeUnit.MILLISECONDS);
+		}, 50, 50, TimeUnit.MILLISECONDS);
 		System.out.println("Scheduled");
 	}
 	
