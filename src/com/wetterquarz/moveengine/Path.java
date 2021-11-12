@@ -81,7 +81,11 @@ public final class Path {
 	}
 	
 	public Vector getOrientation(int segment, double progress) {
-		return new Vector(0,0,1);
+		double x = -3*Math.pow(1-progress, 2) * nodes[segment].getX() + 3*((3*progress-4)*progress+1) * firstInternodes[segment].x + 3*(-3*progress+2)*progress * secondInternodes[segment].x + 3*Math.pow(progress, 2)*nodes[segment+1].getX();
+		double z = -3*Math.pow(1-progress, 2) * nodes[segment].getZ() + 3*((3*progress-4)*progress+1) * firstInternodes[segment].y + 3*(-3*progress+2)*progress * secondInternodes[segment].y + 3*Math.pow(progress, 2)*nodes[segment+1].getZ();
+		var result = new Vector(x,0,z);
+		result.normalize();
+		return result;
 	}
 	
 	public double get2DSegmentLength(int segment) {
